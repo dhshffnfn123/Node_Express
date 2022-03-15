@@ -5,11 +5,27 @@ app.locals.pretty = true; // jade 코드 이쁘게 정렬
 app.set('view engine', 'jade');
 app.set('views', './views'); // 생략해도 가능
 app.use(express.static('public')); // public은 디렉토리 명, 정적인 파일이 위치하는 곳
-app.get('/topic', function (req, res) {
-  var topics = ['Javascript is...', 'Nodejs is...', 'Express is...'];
-  res.send(req.query.id);
+app.get('/form', function (req, res) {
+  res.render('form');
 });
-
+app.get('/form_receiver', function (req, res) {
+  var title = req.query.title;
+  var description = req.query.description;
+  res.send(title + ',' + description);
+});
+app.get('/topic:id', function (req, res) {
+  var topics = ['Javascript is...', 'Nodejs is...', 'Express is...'];
+  var output = `
+  <a href="topic?id=0">JavaScript</a><br>
+  <a href="topic?id=0">Nodejs</a><br>
+  <a href="topic?id=0">Express</a><br>
+  ${topics[req.params.id]}
+  `;
+  res.send(output);
+});
+app.get('/topic/:id/:mode', function (req, res) {
+  res.send(req.params.id + ',' + req.params.mode);
+});
 app.get('/template', function (req, res) {
   res.render('temp', { time: Date(), _title: 'Jade' }); // 두번째 인자는 jade에서 사용할 변수를 객체로 넣어준다.
 });
